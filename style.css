@@ -1,77 +1,67 @@
-/* ====== Overlay-Stil für grüne Matten / Außenlicht ====== */
-
+/* ====== Grundlayout 1080p ====== */
+html,
 body {
-  background-color: rgba(0,0,0,0); /* voll transparent für Luma-Key */
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
+    width: 1920px;
+    height: 1080px;
+    margin: 0;
+    padding: 0;
+    background: rgba(0, 0, 0, 0);
+    /* transparenter Hintergrund */
+    overflow: hidden;
+    font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
 /* ====== Standardtext ====== */
 .pos {
-  position: absolute;
-  font-weight: 600;
-  line-height: 1.3;
-  color: rgba(255,255,255,0.95);
-  text-shadow:
-    0 1px 2px rgba(0,0,0,0.8),
-    0 0 8px rgba(0,0,0,0.6);
-  white-space: pre-line;
+    position: absolute;
+    font-weight: 600;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.8),
+        0 0 8px rgba(0, 0, 0, 0.6);
+    white-space: pre-line;
 }
 
 /* ====== Titel oben links ====== */
 .text1 {
-  top: 40px;
-  left: 60px;
-  font-size: 22px;
-  letter-spacing: 0.3px;
-  color: rgba(255,255,255,0.95);
-  text-shadow:
-    0 1px 3px rgba(0,0,0,0.8),
-    0 0 8px rgba(0,0,0,0.5);
+    top: 40px;
+    left: 60px;
+    font-size: 22px;
+    letter-spacing: 0.3px;
 }
 
-
-
-/* ====== Mittentext auf halbtransparentem Hintergrund ====== */
+/* ====== Mittentext (Box) ====== */
 .text_mitte {
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 70%;
-  padding: 20px 28px;
-  font-size: 26px;
-  color: rgba(255,255,255,0.97);
-  background: rgba(0,0,0,0.55);     /* dunkler für hellgrünen Hintergrund */
-  border-radius: 12px;
-  text-align: left;
-  backdrop-filter: blur(5px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    padding: 20px 28px;
+    font-size: 26px;
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: 12px;
+    text-align: left;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
 }
 
 /* ====== Uhrzeit oben rechts ====== */
 .uhr {
-  top: 40px;
-  right: 60px;
-  font-size: 34px;
-  font-family: "Roboto Mono", "Courier New", monospace;
-  font-variant-numeric: tabular-nums;
-  color: rgba(255,255,255,0.92);
-  font-weight: 600;
-  text-shadow:
-    0 1px 3px rgba(0,0,0,0.8),
-    0 0 6px rgba(0,255,200,0.4);
+    top: 40px;
+    right: 60px;
+    font-size: 34px;
+    font-family: "Roboto Mono", "Courier New", monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    text-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.8),
+        0 0 6px rgba(0, 255, 200, 0.4);
 }
 
-/* ====== Ein/Ausblenden ====== */
-.fadein { animation: fadein 0.4s ease-in forwards; }
-@keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
+/* ====== Animationen ====== */
+@keyframes fadein { from {opacity:0;} to {opacity:1;} }
+@keyframes fadeout { from {opacity:1;} to {opacity:0;} }
+
+.fadein  { animation: fadein 0.4s ease-in forwards; }
 .fadeout { animation: fadeout 0.4s ease-out forwards; }
-@keyframes fadeout {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
