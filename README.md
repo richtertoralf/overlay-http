@@ -37,7 +37,7 @@ overlay-http/
 ## Installation
 
 ```bash
-git clone https://github.com/<dein-user>/overlay-http.git
+git clone https://github.com/richtertoralf/overlay-http.git
 cd overlay-http
 sudo ./install.sh
 ```
