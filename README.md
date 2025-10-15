@@ -4,6 +4,8 @@
 Es stellt Texte und Status-Infos als Browser-Quelle bereit, ideal für **GoStream Duet 8 ISO**, **OBS**, **vMix** oder andere Mischsysteme.
 
 ---
+> install.sh funktioniert noch nicht.
+> Die alte Struktur ist getestet. Projekt aber noch sehr frisch, Version 0.2 ;-)
 
 ## Funktionen
 
