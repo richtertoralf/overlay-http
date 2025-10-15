@@ -31,6 +31,24 @@ overlay-http/
    ├── text_*.txt → Textdateien für Positionen
    └── cgi-bin/ → Platz für spätere CGI-Skripte
 ```
+```
+# alt:
+tori@mediamtx18:/opt/overlay$ tree
+.
+├── cgi-bin
+│   └── update.sh
+├── control.html
+├── control.js
+├── index.html
+├── state.json
+├── style.css
+├── text1.txt
+├── text2.txt
+├── text3.txt
+├── text4.txt
+├── text_mitte.txt
+└── update.js
+```
 
 ---
 
