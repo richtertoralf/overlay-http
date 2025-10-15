@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Overlay-Steuerung</title>
+<script src="control.js"></script>
+<style>
+body { background:#222; color:#eee; font-family:Arial,sans-serif; padding:20px; }
+button,textarea { margin:5px 0; font-size:16px; }
+textarea { width:100%; height:100px; }
+.label { font-weight:bold; margin-top:10px; display:block; }
+</style>
+</head>
+<body>
+<h2>Overlay-Steuerung</h2>
+<!-- Titeltext -->
+<label class="label">Titeltext (oben links):</label>
+<textarea id="text_title"></textarea><br>
+<button onclick="saveText('text1.txt','text_title')">Speichern</button>
+<hr>
+<!-- Mittentext -->
+<label class="label">Text Mitte:</label>
+<textarea id="text_mitte"></textarea><br>
+<button onclick="saveText('text_mitte.txt','text_mitte')">Speichern</button>
+<hr>
+<!-- Sichtbarkeiten -->
+<label><input type="checkbox" id="showTitle" checked> Titel anzeigen</label><br>
+<label><input type="checkbox" id="showClock" checked> Uhrzeit anzeigen</label><br>
+<label><input type="checkbox" id="showMitte" checked> Mittentext anzeigen</label><br>
+<button onclick="saveState()">Status speichern</button>
+<p id="result"></p>
+</body>
+</html>
