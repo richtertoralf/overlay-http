@@ -1,1 +1,24 @@
-{"showTitle":true,"showClock":true,"showMitte":true}
+{
+  "event": {
+    "title": "DM Skisprung",
+    "location": "Oberhof",
+    "date": "30. bis 31.10.2025",
+    "style": "normal"
+  },
+  "weather": {
+    "temperature": "10°C",
+    "wind": "2 m/s",
+    "visibility": "Sonnig"
+  },
+  "schedule": "Donnerstag, 30.10.2025\n\nVormittag Freies Training\n14:00 Mannschaftsführersitzung\n15:00 Offizielles Sprungtraining 1 Durchgang\n16:15 Probedurchgang\n17:30 1.Wertungsdurchgang (Damen/Herren)\n15 min Pause anschließend Finaldurchgang",
+  "show": {
+    "event": true,
+    "weather": true,
+    "schedule": true,
+    "uhr": true,
+    "branding": true
+  },
+  "branding": {
+    "logo": "snowgames_logo.svg"
+  }
+}
