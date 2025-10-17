@@ -3,57 +3,104 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overlay-Steuerung</title>
-    <script src="control.js"></script>
-    <style>
-        body {
-            background: #222;
-            color: #eee;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
+    <title>Snowgames Overlay Control</title>
 
-        button,
-        textarea {
-            margin: 5px 0;
-            font-size: 16px;
-        }
+    <!-- Steuerungs-Logik -->
+    <script src="control.js" defer></script>
 
-        textarea {
-            width: 80%;
-            resize: vertical;
-        }
-
-        .label {
-            font-weight: bold;
-            margin-top: 10px;
-            display: block;
-        }
-    </style>
+    <!-- Broadcast-Design -->
+    <link rel="stylesheet" href="static/css/control.css">
 </head>
 
 <body>
-    <h2>Overlay-Steuerung</h2>
+    <h2>Snowgames Overlay – Dashboard-Steuerung</h2>
 
-    <!-- Titeltext -->
-    <label class="label">Titeltext (oben links):</label>
-    <textarea id="text_title" rows="3"></textarea><br>
-    <button onclick="saveText('text1.txt','text_title')">Speichern</button>
-    <hr>
+    <div class="dashboard">
 
-    <!-- Mittentext -->
-    <label class="label">Text Mitte:</label>
-    <textarea id="text_mitte" rows="14"></textarea><br>
-    <button onclick="saveText('text_mitte.txt','text_mitte')">Speichern</button>
-    <hr>
+        <div class="dashboard-grid">
 
-    <!-- Sichtbarkeiten -->
-    <label><input type="checkbox" id="showTitle" checked> Titel anzeigen</label><br>
-    <label><input type="checkbox" id="showClock" checked> Uhrzeit anzeigen</label><br>
-    <label><input type="checkbox" id="showMitte" checked> Mittentext anzeigen</label><br>
-    <button onclick="saveState()">Status speichern</button>
-    <p id="result"></p>
+            <section class="tile event">
+                <h3>Event Info</h3>
+                <label for="event_title">Titel:</label>
+                <input id="event_title" type="text" placeholder="Eventtitel">
+                <label for="event_location">Ort / Land:</label>
+                <input id="event_location" type="text" placeholder="Ort / Land">
+                <label for="event_date">Datum / Zeitraum:</label>
+                <input id="event_date" type="text" placeholder="Datum / Zeitraum">
+
+                <div class="event-controls">
+                    <button id="btn_event_large">🟨 Groß</button>
+                    <button id="btn_event_small" class="secondary">🟦 Klein</button>
+                    <button id="btn_event_off" class="danger">⏹️ Aus</button>
+                </div>
+
+            </section>
+
+            <section class="weather-section">
+                <h3>Wetter</h3>
+                <div class="weather-group">
+                    <input id="weather_temp" type="text" placeholder="Temperatur (°C)">
+                    <input id="weather_wind" type="text" placeholder="Wind (m/s)">
+                    <input id="weather_vis" type="text" placeholder="Sicht (Good / Poor)">
+                </div>
+                <div class="weather-controls">
+                    <button id="btn_show_weather">▶️ Einblenden</button>
+                    <button id="btn_hide_weather" class="secondary">⏹️ Ausblenden</button>
+                </div>
+
+            </section>
+
+            <section class="tile clock">
+                <h3>Uhrzeit / Countdown</h3>
+                <div class="clock-controls">
+                    <button id="btn_show_uhr">▶️ Einblenden</button>
+                    <button id="btn_hide_uhr" class="secondary">⏹️ Ausblenden</button>
+                </div>
+
+            </section>
+
+            <section class="tile schedule">
+                <h3>Infotext / Ablauf / Programm</h3>
+                <textarea id="schedule_text" placeholder="Uhrzeiten und Programmpunkte..."></textarea>
+                <div class="schedule-controls">
+                    <button id="btn_show_schedule">▶️ Einblenden</button>
+                    <button id="btn_hide_schedule" class="secondary">⏹️ Ausblenden</button>
+                </div>
+
+            </section>
+
+            <section class="tile sponsors">
+                <h3>Sponsoren</h3>
+                <!-- Logos oder Upload-Feld -->
+            </section>
+
+            <section class="tile branding">
+                <h3>Branding</h3>
+
+                <div class="branding-preview">
+                    <img id="branding_preview" src="static/img/snowgames_logo.svg" alt="Snowgames Logo">
+                </div>
+
+                <div class="branding-controls">
+                    <button id="btn_show_branding">▶️ Einblenden</button>
+                    <button id="btn_hide_branding" class="secondary">⏹️ Ausblenden</button>
+                </div>
+            </section>
+
+            <section class="tile outro">
+                <h3>Outro / Credits</h3>
+                <!-- Text / Social Links -->
+            </section>
+
+        </div>
+
+        <!-- ===== SIDE (Save Button) ===== -->
+        <div class="side">
+            <section class="actions-section">
+                <p id="result"></p>
+            </section>
+        </div>
+    </div>
 </body>
 
 </html>
