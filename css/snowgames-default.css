@@ -1,0 +1,229 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+/* ==========================================================================
+   SNOWGAMES.LIVE – Default Overlay Design (v2)
+   Struktur & Stil für Browser Overlays im 1920x1080 Broadcast-Layout
+   ==========================================================================
+*/
+
+/* === Farbdefinitionen === */
+:root {
+    --sg-blue-dark: #0A2E6D;
+    --sg-blue-light: #009CD9;
+    --sg-red: #E30613;
+    --sg-yellow: #F0AB00;
+    --sg-black-trans: rgba(16, 16, 16, 0.75);
+    --sg-white: #ffffff;
+}
+
+/* === Grundlayout === */
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: transparent;
+    /*background-color: #111 !important; */
+    font-family: 'Roboto Condensed', Arial, sans-serif;
+    color: var(--sg-white);
+    font-weight: 600;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.8),
+        0 0 8px rgba(0, 0, 0, 0.6);
+}
+
+.pos {
+    position: absolute;
+    white-space: pre-line;
+}
+
+/* ==========================================================================
+   EVENT BOX – Hauptmodul für Eventtitel, Ort, Datum
+   Unterstützt zwei Modi:
+   - .normal (Vorspann)
+   - .compact (permanent sichtbar, dezente Schrift)
+   ==========================================================================
+*/
+
+/* === Grundlayout (gemeinsam) === */
+.event_box {
+    top: 30px;
+    left: 40px;
+    color: var(--sg-white);
+    border-radius: 10px;
+    border-left: 6px solid var(--sg-yellow);
+    position: absolute;
+    line-height: 1.1;
+    transition:
+        opacity 0.8s ease-in-out,
+        all 0.4s ease-in-out;
+    opacity: 0;
+}
+
+/* === Sichtbarkeitssteuerung (Fade-In/Out) === */
+.event_box.visible {
+    opacity: 1;
+}
+
+/* === Variante: Normal (z. B. Vorspann oder Anmoderation) === */
+.event_box.normal {
+    background: rgba(0, 0, 0, 0.45);
+    padding: 8px 22px;
+    max-width: 720px;
+}
+
+.event_box.normal .event_title {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.0;
+}
+
+.event_box.normal .event_location {
+    font-size: 26px;
+    opacity: 0.95;
+}
+
+.event_box.normal .event_date {
+    font-size: 22px;
+    color: var(--sg-blue-light);
+}
+
+/* === Variante: Compact (z. B. ARD/ZDF-Stil dauerhaft sichtbar) === */
+.event_box.compact {
+    display: block !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.event_box.compact.visible {
+    opacity: 0.9;
+    /* beim Einblenden leicht betont */
+}
+
+.event_box.compact .event_title {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.event_box.compact .event_location {
+    font-size: 20px;
+    opacity: 0.9;
+}
+
+.event_box.compact .event_date {
+    display: none;
+    /* Datum in Compact-Modus ausgeblendet */
+}
+
+/* ==========================================================================
+   WEATHER BOX – Temperatur, Wind, Sicht
+   ==========================================================================
+*/
+
+.weather_box {
+    top: 300px;
+    left: 40px;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 10px;
+    padding: 6px 14px;
+    color: var(--sg-white);
+    text-align: right;
+    font-size: 24px;
+    line-height: 0.7;
+    border-left: 4px solid var(--sg-blue-light);
+    transition: opacity 0.8s ease-in-out;
+    opacity: 0;
+}
+
+.weather_box.visible {
+    opacity: 1;
+}
+
+.weather_box div:not(:last-child) {
+    margin-bottom: 4px;
+}
+
+/* ==========================================================================
+   SCHEDULE BOX – Ablauf / Programm (zentriert)
+   ==========================================================================
+*/
+
+.schedule_box {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 40px;
+    border-left: 6px solid var(--sg-blue-light);
+    padding: 30px 60px;
+    font-size: 28px;
+    text-align: left;
+    white-space: pre-line;
+    line-height: 1.3;
+    max-width: 1200px;
+    transition: opacity 0.8s ease-in-out;
+    opacity: 0;
+}
+
+.schedule_box.visible {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   CLOCK – Uhrzeit unten links
+   ==========================================================================
+*/
+
+.uhr {
+    bottom: 30px;
+    left: 40px;
+    font-size: 28px;
+    background: var(--sg-black-trans);
+    border-radius: 10px;
+    padding: 6px 14px;
+    border-left: 4px solid var(--sg-red);
+    line-height: 1.0;
+    transition: opacity 0.6s ease-in-out;
+    opacity: 0;
+}
+
+.uhr.visible {
+    opacity: 1;
+}
+
+
+/* ==========================================================================
+   BRANDING – Snowgames.live Logo unten rechts
+   ========================================================================== */
+.branding_box {
+  position: absolute;
+  bottom: 10px;         /* Abstand vom unteren Rand */
+  right: 80px;          /* Abstand vom rechten Rand */
+  width: 280px;         /* Gesamtgröße des Containers */
+  height: auto;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+  transform: translateY(10px); /* Startposition für weiches Einblenden */
+}
+
+.branding_box.visible {
+  opacity: 1;
+  transform: translateY(0);    /* gleitet leicht nach oben beim Einblenden */
+}
+
+/* Bild im Container zentrieren und skalieren */
+.branding_box img {
+  display: block;
+  width: 100%;          /* passt sich Containerbreite an */
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); /* leichter Schatten für TV-Look */
+}
+
+
+/* ==========================================================================
+   ENDE DER DATEI
+   ========================================================================== */
