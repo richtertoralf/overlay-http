@@ -34,21 +34,21 @@ overlay-http/
    └── cgi-bin/ → Platz für spätere CGI-Skripte
 ```
 ```
-# alt:
+# Stand 17.10.25:
 tori@mediamtx18:/opt/overlay$ tree
 .
 ├── cgi-bin
-│   └── update.sh
+│   └── update.sh
 ├── control.html
 ├── control.js
 ├── index.html
 ├── state.json
-├── style.css
-├── text1.txt
-├── text2.txt
-├── text3.txt
-├── text4.txt
-├── text_mitte.txt
+├── static
+│   ├── css
+│   │   ├── control.css
+│   │   └── snowgames-default.css
+│   └── img
+│       └── snowgames_logo.svg
 └── update.js
 ```
 
