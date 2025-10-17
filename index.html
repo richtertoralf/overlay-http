@@ -2,26 +2,40 @@
 <html lang="de">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Erzwingt Neuladen jeder Ressource bei jedem Aufruf, wichtig bei GoStream Mischer -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-
-    <title>Overlay Anzeige</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="update.js" defer></script>
+  <meta charset="UTF-8">
+  <title>Snowgames Overlay</title>
+  <link rel="stylesheet" href="static/css/snowgames-default.css">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script src="update.js" defer></script>
 </head>
 
-<body class="clock-top-right">
-    <div id="text1" class="pos text1"></div>
-    <div id="text2" class="pos text2"></div>
-    <div id="text3" class="pos text3"></div>
-    <div id="text4" class="pos text4"></div>
-    <div id="text_mitte" class="pos text_mitte"></div>
-    <div id="uhr" class="pos uhr"></div>
+<body>
+  <!-- === Event Box (oben links) === -->
+  <div id="event_box" class="pos event_box">
+    <div id="event_title" class="event_title"></div>
+    <div id="event_location" class="event_location"></div>
+    <div id="event_date" class="event_date"></div>
+  </div>
+
+  <!-- === Weather Box (oben rechts) === -->
+  <div id="weather_box" class="pos weather_box">
+    <div id="weather_temp"></div>
+    <div id="weather_wind"></div>
+    <div id="weather_vis"></div>
+  </div>
+
+  <!-- === Schedule Box (zentriert) === -->
+  <div id="schedule_box" class="pos schedule_box"></div>
+
+  <!-- === Uhrzeit (oben rechts, klein) === -->
+  <div id="uhr" class="pos uhr"></div>
+
+  <!-- === Branding === -->
+  <div id="branding_box" class="branding_box"></div>
+
+
 </body>
 
 </html>
