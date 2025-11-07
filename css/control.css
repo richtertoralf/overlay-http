@@ -1,179 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700&display=swap');
+
 /* =======================================================
-   SNOWGAMES OVERLAY CONTROL PANEL – DASHBOARD v1.1
-   Layout optimiert für 1920×1080 Broadcast-Monitore
+   SNOWGAMES CONTROL DASHBOARD – 6×6 GRID LAYOUT
+   Language: English
+   Designed for operator control panel (not overlay)
+   Version: 2025-10-25
    ======================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+/* =======================================================
+   1. VARIABLES & BASE STYLES
+   ======================================================= */
 
 :root {
-  --sg-bg: #222;
-  --sg-panel: #2a2a2a;
-  --sg-border: #444;
-  --sg-text: #eee;
-  --sg-accent: #f0ab00;
-  --sg-blue-light: #009CD9;
+  /* --- COLOR THEME --- */
+  --bg: #222;
+  --panel: #2a2a2a;
+  --border: #444;
+  --text: #eee;
+  --accent: #f0ab00;
+  --blue: #009cd9;
+
+  /* --- FONT SCALING --- */
+  font-size: 1vh;
+  /* dynamic base: 1% of viewport height */
 }
 
-/* === Grundlayout (Standardkonform) === */
 html,
 body {
+  height: 100vh;
   width: 100%;
-  min-height: 100vh;
   margin: 0;
-  background: var(--sg-bg);
-  color: var(--sg-text);
-  font-family: 'Roboto Condensed', Arial, sans-serif;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Roboto Condensed", Arial, sans-serif;
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  /* prevent horizontal scrollbars */
+}
+
+
+/* =======================================================
+   2. TYPOGRAPHY
+   ======================================================= */
+
 h2 {
-  color: var(--sg-accent);
-  margin: 6px 14px;
-  border-bottom: 2px solid var(--sg-accent);
-  padding-bottom: 4px;
+  margin: 1vh 1vw 0 1vw;
+  border-bottom: 0.15vh solid var(--blue);
+  padding-bottom: 0.3vh;
+  font-size: 3rem;
+  color: var(--accent);
 }
 
 h3 {
-  color: var(--sg-accent);
-  margin-top: 0;
-  margin-bottom: 6px;
-  font-size: 18px;
+  margin: 0 0 0.8vh 0;
+  font-size: 2.5rem;
+  color: var(--accent);
 }
 
-/* === Grid-System für Pre/Post Event === */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto auto auto;
-  gap: 10px;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.tile {
-  background: var(--sg-panel);
-  border-left: 4px solid var(--sg-accent);
-  padding: 10px 14px;
-  border-radius: 4px;
-  padding: 15px 20px;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-}
-
-
-
-/* Grid-Positionen */
-.tile.event {
-  grid-area: 1 / 1 / 2 / 2;
-}
-
-.tile.weather {
-  grid-area: 1 / 2 / 2 / 3;
-}
-
-.tile.clock {
-  grid-area: 1 / 3 / 2 / 4;
-}
-
-.tile.schedule {
-  grid-area: 2 / 1 / 3 / 3;
-}
-
-/* 2 Spalten */
-.tile.sponsors {
-  grid-area: 2 / 3 / 3 / 4;
-}
-
-.tile.outro {
-  grid-area: 3 / 1 / 3 / 3;
-}
-
-.tile.branding {
-  grid-area: 3 / 3 / 3 / 4;
-}
-
-
-/* === Top-Row === */
-.top-row {
-  grid-area: top;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.top-row section {
-  flex: 1;
-  min-width: 0;
-}
-
-/* === Main-Area === */
-.main {
-  grid-area: main;
-  display: flex;
-  flex-direction: column;
-}
-
-/* === Side-Area === */
-.side {
-  grid-area: side;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-/* === Panels (Sections) === */
-section {
-  background: var(--sg-panel);
-  border-left: 4px solid var(--sg-accent);
-  border-radius: 6px;
-  padding: 15px 20px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
-}
-
-label {
-  display: block;
-  margin-top: 2px;
+label,
+.status {
+  font-size: 2rem;
   font-weight: 500;
 }
 
-input[type="text"],
-textarea {
-  width: 100%;
-  font-size: 14px;
-  color: var(--sg-text);
+input,
+textarea,
+button {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+
+/* =======================================================
+   3. LAYOUT STRUCTURE (GRID)
+   ======================================================= */
+
+.dashboard-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, minmax(10vh, auto));
+  gap: 0.6vh 0.4vw;
+  padding: 1vh 1vw;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* status line below grid */
+.status {
+  margin: 1vh;
+  font-weight: 600;
+  color: var(--blue);
+}
+
+
+/* =======================================================
+   4. COMPONENTS / MODULES
+   ======================================================= */
+
+/* --- Base Tile --- */
+.tile {
+  background: var(--panel);
+  border-left: 0.3vh solid var(--accent);
+  border-radius: 0.5vh;
+  padding: 1vh 1vw;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 0.4vh rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.tile:hover {
   background: #333;
-  border: 1px solid var(--sg-border);
-  border-radius: 4px;
-  padding: 6px 8px;
-  margin-bottom: 4px;
+  box-shadow: 0 0 1.2vh rgba(240, 171, 0, 0.4);
+  cursor: pointer;
+}
+
+/* --- Tile Positions (6×6 Grid) --- */
+.tile.event {
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 2;
+}
+
+.tile.caption {
+  grid-column: 3 / span 2;
+  grid-row: 1 / span 2;
+}
+
+.tile.weather {
+  grid-column: 5 / span 2;
+  grid-row: 1 / span 1;
+}
+
+.tile.clock {
+  grid-column: 5 / span 2;
+  grid-row: 2 / span 1;
+}
+
+.tile.sponsor_bug {
+  grid-column: 5 / span 2;
+  grid-row: 3 / span 1;
+}
+
+.tile.sponsor_bar {
+  grid-column: 5 / span 2;
+  grid-row: 4 / span 1;
+}
+
+.tile.branding {
+  grid-column: 5 / span 2;
+  grid-row: 5 / span 1;
+}
+
+.tile.schedule {
+  grid-column: 1 / span 4;
+  grid-row: 3 / span 2;
+}
+
+.tile.outro {
+  grid-column: 1 / span 4;
+  grid-row: 5 / span 2;
+}
+
+
+/* --- Textareas --- */
+.tile textarea {
+  width: 90%;
+  min-height: 15vh;
+  background: #333;
+  color: var(--text);
+  border: 0.1vh solid var(--border);
+  border-radius: 0.4vh;
+  padding: 1vh 1vw;
+  resize: vertical;
+}
+
+/* --- Text Inputs --- */
+input[type="text"] {
+  width: 100%;
+  margin-bottom: 0.5vh;
+  background: #333;
+  color: var(--text);
+  border: 0.1vh solid var(--border);
+  border-radius: 0.4vh;
+  padding: 0.6vh 1vw;
   box-sizing: border-box;
 }
 
-/* === Textfelder === */
-textarea {
-  resize: vertical;
-  min-height: 180px;
-  line-height: 1.2;
+/* --- Labels --- */
+label {
+  display: block;
+  color: #ccc;
+  margin-bottom: 0.3vh;
 }
 
-input[type="checkbox"] {
-  transform: scale(1.2);
-  margin-right: 6px;
+/* --- Control Button Container --- */
+.controls {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1vh;
 }
 
+/* --- Buttons --- */
 button {
-  display: inline-block;
-  background: var(--sg-accent);
+  background: var(--accent);
   color: #000;
   border: none;
-  border-radius: 6px;
-  padding: 8px 18px;
-  font-size: 16px;
-  font-weight: 700;
+  border-radius: 0.5vh;
+  padding: 0.6vh 1vw;
   cursor: pointer;
-  margin: 4px 6px 0 0;
   transition: background 0.2s ease;
 }
 
@@ -191,72 +233,49 @@ button.secondary:hover {
 }
 
 button.active {
-  background: #009CD9;
-  color: #fff;
+  border: 0.3vh solid var(--blue);
+  box-shadow: 0 0 1vh rgba(0, 156, 217, 0.6);
+  background: #333;
+  color: var(--blue);
 }
 
-#result {
-  margin-top: 10px;
-  color: var(--sg-blue-light);
-  font-weight: 600;
-}
 
-/* === Wetterfelder nebeneinander === */
+/* =======================================================
+   5. UTILITIES & DETAILS
+   ======================================================= */
+
 .weather-group {
   display: flex;
-  gap: 10px;
+  /* inputs side-by-side */
+  gap: 1vh;
+  /* spacing between inputs */
   flex-wrap: nowrap;
+  /* single line */
 }
 
-/* === Responsive-Fallback für kleinere Screens === */
-@media (max-width: 1600px) {
-  textarea {
-    height: 240px;
-  }
-
-  .dashboard {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "top"
-      "main"
-      "side";
-  }
-
-  .top-row {
-    flex-direction: column;
-  }
+.weather-group input {
+  flex: 1;
+  min-width: 0;
+  /* prevent overflow */
 }
 
-button.secondary {
-  background: #555;
-  color: #eee;
-}
-
-button.secondary:hover {
-  background: #666;
-}
-
-.event-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 8px;
-}
-
-.event-controls label {
-  font-weight: 400;
-}
-
-.branding-preview {
-  background: #fff;
-  border-radius: 8px;
+.clock-display {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 0.1vh;
+  margin-top: 0.1vh;
   text-align: center;
-  padding: 8px;
-  margin-bottom: 10px;
+  letter-spacing: 0.1rem;
+  line-height: 0.1;
+}
+
+.tile.branding {
+  justify-content: flex-start;
 }
 
 .branding-preview img {
-  max-width: 120px; 
-  margin: 0 auto;
+  max-height: 3.5vh;
   display: block;
+  margin: 0 auto;
 }
