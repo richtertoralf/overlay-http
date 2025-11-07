@@ -1,0 +1,281 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700&display=swap');
+
+/* =======================================================
+   SNOWGAMES CONTROL DASHBOARD – 6×6 GRID LAYOUT
+   Language: English
+   Designed for operator control panel (not overlay)
+   Version: 2025-10-25
+   ======================================================= */
+
+
+/* =======================================================
+   1. VARIABLES & BASE STYLES
+   ======================================================= */
+
+:root {
+  /* --- COLOR THEME --- */
+  --bg: #222;
+  --panel: #2a2a2a;
+  --border: #444;
+  --text: #eee;
+  --accent: #f0ab00;
+  --blue: #009cd9;
+
+  /* --- FONT SCALING --- */
+  font-size: 1vh;
+  /* dynamic base: 1% of viewport height */
+}
+
+html,
+body {
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Roboto Condensed", Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  /* prevent horizontal scrollbars */
+}
+
+
+/* =======================================================
+   2. TYPOGRAPHY
+   ======================================================= */
+
+h2 {
+  margin: 1vh 1vw 0 1vw;
+  border-bottom: 0.15vh solid var(--blue);
+  padding-bottom: 0.3vh;
+  font-size: 3rem;
+  color: var(--accent);
+}
+
+h3 {
+  margin: 0 0 0.8vh 0;
+  font-size: 2.5rem;
+  color: var(--accent);
+}
+
+label,
+.status {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+input,
+textarea,
+button {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+
+/* =======================================================
+   3. LAYOUT STRUCTURE (GRID)
+   ======================================================= */
+
+.dashboard-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, minmax(10vh, auto));
+  gap: 0.6vh 0.4vw;
+  padding: 1vh 1vw;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* status line below grid */
+.status {
+  margin: 1vh;
+  font-weight: 600;
+  color: var(--blue);
+}
+
+
+/* =======================================================
+   4. COMPONENTS / MODULES
+   ======================================================= */
+
+/* --- Base Tile --- */
+.tile {
+  background: var(--panel);
+  border-left: 0.3vh solid var(--accent);
+  border-radius: 0.5vh;
+  padding: 1vh 1vw;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 0.4vh rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.tile:hover {
+  background: #333;
+  box-shadow: 0 0 1.2vh rgba(240, 171, 0, 0.4);
+  cursor: pointer;
+}
+
+/* --- Tile Positions (6×6 Grid) --- */
+.tile.event {
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 2;
+}
+
+.tile.caption {
+  grid-column: 3 / span 2;
+  grid-row: 1 / span 2;
+}
+
+.tile.weather {
+  grid-column: 5 / span 2;
+  grid-row: 1 / span 1;
+}
+
+.tile.clock {
+  grid-column: 5 / span 2;
+  grid-row: 2 / span 1;
+}
+
+.tile.sponsor_bug {
+  grid-column: 5 / span 2;
+  grid-row: 3 / span 1;
+}
+
+.tile.sponsor_bar {
+  grid-column: 5 / span 2;
+  grid-row: 4 / span 1;
+}
+
+.tile.branding {
+  grid-column: 5 / span 2;
+  grid-row: 5 / span 1;
+}
+
+.tile.schedule {
+  grid-column: 1 / span 4;
+  grid-row: 3 / span 2;
+}
+
+.tile.outro {
+  grid-column: 1 / span 4;
+  grid-row: 5 / span 2;
+}
+
+
+/* --- Textareas --- */
+.tile textarea {
+  width: 90%;
+  min-height: 15vh;
+  background: #333;
+  color: var(--text);
+  border: 0.1vh solid var(--border);
+  border-radius: 0.4vh;
+  padding: 1vh 1vw;
+  resize: vertical;
+}
+
+/* --- Text Inputs --- */
+input[type="text"] {
+  width: 100%;
+  margin-bottom: 0.5vh;
+  background: #333;
+  color: var(--text);
+  border: 0.1vh solid var(--border);
+  border-radius: 0.4vh;
+  padding: 0.6vh 1vw;
+  box-sizing: border-box;
+}
+
+/* --- Labels --- */
+label {
+  display: block;
+  color: #ccc;
+  margin-bottom: 0.3vh;
+}
+
+/* --- Control Button Container --- */
+.controls {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1vh;
+}
+
+/* --- Buttons --- */
+button {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 0.5vh;
+  padding: 0.6vh 1vw;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #ffd84d;
+}
+
+button.secondary {
+  background: #444;
+  color: #eee;
+}
+
+button.secondary:hover {
+  background: #555;
+}
+
+button.active {
+  border: 0.3vh solid var(--blue);
+  box-shadow: 0 0 1vh rgba(0, 156, 217, 0.6);
+  background: #333;
+  color: var(--blue);
+}
+
+
+/* =======================================================
+   5. UTILITIES & DETAILS
+   ======================================================= */
+
+.weather-group {
+  display: flex;
+  /* inputs side-by-side */
+  gap: 1vh;
+  /* spacing between inputs */
+  flex-wrap: nowrap;
+  /* single line */
+}
+
+.weather-group input {
+  flex: 1;
+  min-width: 0;
+  /* prevent overflow */
+}
+
+.clock-display {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 0.1vh;
+  margin-top: 0.1vh;
+  text-align: center;
+  letter-spacing: 0.1rem;
+  line-height: 0.1;
+}
+
+.tile.branding {
+  justify-content: flex-start;
+}
+
+.branding-preview img {
+  max-height: 3.5vh;
+  display: block;
+  margin: 0 auto;
+}
