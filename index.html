@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -8,33 +8,42 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <script src="update.js" defer></script>
+  <script>
+    const timestamp = Date.now();
+    document.write(`<script src="update.js?t=${timestamp}" defer><\/script>`);
+  </script>
 </head>
 
 <body>
-  <!-- === Event Box (oben links) === -->
+
   <div id="event_box" class="pos event_box">
     <div id="event_title" class="event_title"></div>
     <div id="event_location" class="event_location"></div>
     <div id="event_date" class="event_date"></div>
   </div>
 
-  <!-- === Weather Box (oben rechts) === -->
   <div id="weather_box" class="pos weather_box">
     <div id="weather_temp"></div>
     <div id="weather_wind"></div>
     <div id="weather_vis"></div>
   </div>
 
-  <!-- === Schedule Box (zentriert) === -->
-  <div id="schedule_box" class="pos schedule_box"></div>
+  <div id="info_box" class="pos schedule_box"></div>
 
-  <!-- === Uhrzeit (oben rechts, klein) === -->
-  <div id="uhr" class="pos uhr"></div>
+  <div id="clock_box" class="pos clock_box"></div>
 
-  <!-- === Branding === -->
-  <div id="branding_box" class="branding_box"></div>
+  <div id="branding_box" class="pos branding_box"></div>
 
+  <div id="caption_box" class="pos caption_box">
+    <div class="caption_bg">
+      <span id="caption_name" class="caption_name"></span>
+      <span id="caption_role" class="caption_role"></span>
+    </div>
+  </div>
+
+  <div id="sponsor_bug_box" class="pos sponsor_bug_box"></div>
+
+  <div id="sponsor_bar_box" class="pos sponsor_bar_box"></div>
 
 </body>
 
