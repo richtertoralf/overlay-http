@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="440" height="120" viewBox="0 0 440 120" preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" width="380" height="44" viewBox="0 0 380 44" preserveAspectRatio="xMidYMid meet">
   <style>
     .snow {
       fill: #0A2E6D;
       fill-opacity: 0.7;
       font-family: Arial, Helvetica, sans-serif;
       font-weight: bold;
-      font-size: 40px;
+      font-size: 38px;
     }
     .live {
       fill: #E30613;
@@ -14,7 +14,7 @@
       font-size: 45px;
     }
   </style>
-  <text x="430" y="70" text-anchor="end">
+  <text x="374" y="26" text-anchor="end" dominant-baseline="middle">
     <tspan class="snow">SNOWGAMES.</tspan>
     <tspan class="live">LIVE</tspan>
   </text>
