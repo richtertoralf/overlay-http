@@ -20,7 +20,8 @@ Es stellt Texte und Status-Infos als Browser-Quelle bereit, ideal für **GoStrea
 
 ## Aufbau
 
-```
+```bash
+# Entwurf
 overlay-http/
 ├── install.sh → Installationsskript
 ├── systemd/overlay-http.service → systemd-Dienstdatei
@@ -33,8 +34,8 @@ overlay-http/
    ├── text_*.txt → Textdateien für Positionen
    └── cgi-bin/ → Platz für spätere CGI-Skripte
 ```
-```
-# Stand 17.10.25:
+```bash
+# Stand 07.11.25:
 tori@mediamtx18:/opt/overlay$ tree
 .
 ├── cgi-bin
@@ -50,6 +51,8 @@ tori@mediamtx18:/opt/overlay$ tree
 │   └── img
 │       └── snowgames_logo.svg
 └── update.js
+
+5 directories, 9 files
 ```
 
 ---
