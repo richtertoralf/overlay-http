@@ -1,24 +1,41 @@
 {
   "event": {
-    "title": "DM Skisprung",
-    "location": "Oberhof",
-    "date": "30. bis 31.10.2025",
+    "title": "DM Skisprung Oberhof",
+    "location": "Teamspringen 1. Durchgang",
+    "date": "31.10.2025",
     "style": "normal"
   },
   "weather": {
     "temperature": "10°C",
-    "wind": "2 m/s",
-    "visibility": "Sonnig"
+    "wind": "Böen bis 60 km/h",
+    "visibility": "leicht bewölkt"
   },
-  "schedule": "Donnerstag, 30.10.2025\n\nVormittag Freies Training\n14:00 Mannschaftsführersitzung\n15:00 Offizielles Sprungtraining 1 Durchgang\n16:15 Probedurchgang\n17:30 1.Wertungsdurchgang (Damen/Herren)\n15 min Pause anschließend Finaldurchgang",
-  "show": {
-    "event": true,
-    "weather": true,
-    "schedule": true,
-    "uhr": true,
-    "branding": true
+  "schedule": {
+    "text": "Freitag, 31.11.2025\n\nkurze Pause - 11:50 geht´s weiter\n",
+    "visible": false
+  },
+  "outro": {
+    "text": "Wir sagen Danke – an alle, die heute in Oberhof den Spirit des Wintersports lebendig gemacht haben, im Ehrenamt.\nVon der Schanze, über den Imbiss bis zu dem Kameras;\nechte Menschen, echtes Engagement, echtes Herzblut.\nwww.Snowgames.Live – gemacht von der Community für die Community, von Sportlern für Sportler.\nEin besonderes Dankeschön aber an die Helfer des WSV Schmiedefeld, die heute die Kameras geschwenkt haben :-)",
+    "visible": true
   },
   "branding": {
     "logo": "snowgames_logo.svg"
-  }
+  },
+  "show": {
+    "event": true,
+    "weather": true,
+    "schedule": false,
+    "clock": true,
+    "branding": true,
+    "caption": true,
+    "sponsorbug": true,
+    "sponsorbar": true
+  },
+  "caption": {
+    "name": "Petra Kühn & Marie Reiß",
+    "role": "WSV Schmiedefeld"
+  },
+  "clock": {},
+  "sponsorbug": {},
+  "sponsorbar": {}
 }
