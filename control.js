@@ -1,178 +1,304 @@
-// ===============================================================
-//  SNOWGAMES OVERLAY CONTROL.JS  v2.0
-//  Struktur: Event, Wetter, Uhrzeit, Infotext
-//  Alle Segmente unabhängig, sofortige Speicherung per updateStatePartial()
-// ===============================================================
+// ========================================================================
+//  SNOWGAMES.LIVE – CONTROL.JS v3.1 (Modernized Edition)
+//  Compatible with control.html (2025-10-25)
+//  Modern JS structure, reusable handlers, clean fetch & better UX
+// ========================================================================
 
-// === Hilfsfunktion: Teilzustände ins JSON schreiben ===
-// === Hilfsfunktion: Nur betroffenen Teil ins JSON schreiben ===
+// ------------------------------------------------------------------------
+//  SETTINGS
+// ------------------------------------------------------------------------
+const DEBUG = true;
+const log = (...args) => DEBUG && console.log("[SG]", ...args);
+
+// ------------------------------------------------------------------------
+//  GLOBAL STATE
+// ------------------------------------------------------------------------
+let localState = null;
+const statusElem = () => document.getElementById("result");
+
+// ------------------------------------------------------------------------
+//  HELPERS
+// ------------------------------------------------------------------------
+async function fetchState() {
+  const res = await fetch("state.json?t=" + Date.now());
+  if (!res.ok) throw new Error("state.json not found");
+  return await res.json();
+}
+
+async function saveState(state) {
+  const res = await fetch("/cgi-bin/update.sh?file=state.json", {
+    method: "POST",
+    body: JSON.stringify(state, null, 2)
+  });
+  return await res.text();
+}
+
+function handleError(err, context = "unknown") {
+  console.error(`❌ [${context}]`, err);
+  if (statusElem()) statusElem().innerText = `Error: ${context}`;
+}
+
+function deepMerge(target, src) {
+  for (const [k, v] of Object.entries(src)) {
+    if (v && typeof v === "object" && !Array.isArray(v)) {
+      target[k] = deepMerge(target[k] || {}, v);
+    } else {
+      target[k] = v;
+    }
+  }
+  return target;
+}
+
 async function updateStatePartial(changes) {
-  console.log("🔄 updateStatePartial:", changes);
   try {
-    const res = await fetch("state.json?t=" + Date.now());
-    const state = res.ok ? await res.json() : {};
-
-    // Nur betroffene Felder aktualisieren, ohne andere zu überschreiben
-    if (changes.show) {
-      state.show = { ...state.show, ...changes.show };
+    if (!localState) localState = await fetchState();
+    localState = deepMerge(localState, changes);
+    const result = await saveState(localState);
+    if (result.includes("OK")) {
+      log("✅ State updated:", changes);
+      if (statusElem()) statusElem().innerText = "Updated ✔️";
+      updateButtonStatus(localState);
+    } else {
+      log("⚠️ Server response:", result);
+      if (statusElem()) statusElem().innerText = "Warning ⚠️";
     }
-    if (changes.event) {
-      state.event = { ...state.event, ...changes.event };
-    }
-    if (changes.weather) {
-      state.weather = { ...state.weather, ...changes.weather };
-    }
-    if (changes.schedule !== undefined) {
-      state.schedule = changes.schedule;
-    }
-
-    if (changes.branding) {
-      state.branding = { ...state.branding, ...changes.branding };
-    }
-
-
-    // Schreiben
-    const response = await fetch("/cgi-bin/update.sh?file=state.json", {
-      method: "POST",
-      body: JSON.stringify(state, null, 2)
-    });
-
-    const txt = await response.text();
-    if (txt.includes("OK")) console.log("✅ Aktualisiert:", changes);
-    else console.warn("⚠️ Serverantwort:", txt);
   } catch (err) {
-    console.error("❌ Update fehlgeschlagen:", err);
+    handleError(err, "updateStatePartial");
   }
 }
 
+// Simple debounce (for live input updates)
+function debounce(fn, delay = 800) {
+  let t;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), delay);
+  };
+}
 
-// === Initial laden + Event-Listener registrieren ===
-window.addEventListener("DOMContentLoaded", async () => {
-  console.log("🚀 Initialisierung gestartet…");
+// ------------------------------------------------------------------------
+//  GENERIC SHOW/HIDE REGISTRATION
+// ------------------------------------------------------------------------
+function registerShowHide(section, options = {}) {
+  const showBtn = document.getElementById(`btn_${section}_show`);
+  const hideBtn = document.getElementById(`btn_${section}_hide`);
 
-  try {
-    const r = await fetch("state.json?t=" + Date.now());
-    if (!r.ok) throw new Error("state.json nicht gefunden");
-    const s = await r.json();
-
-    // === EVENT ===
-    document.getElementById("event_title").value = s.event?.title || "";
-    document.getElementById("event_location").value = s.event?.location || "";
-    document.getElementById("event_date").value = s.event?.date || "";
-    const styleValue = s.event?.style || "normal";
-    const sizeRadio = document.querySelector(`input[name="event_size"][value="${styleValue}"]`);
-    if (sizeRadio) sizeRadio.checked = true;
-
-    // === WETTER ===
-    document.getElementById("weather_temp").value = s.weather?.temperature || "";
-    document.getElementById("weather_wind").value = s.weather?.wind || "";
-    document.getElementById("weather_vis").value = s.weather?.visibility || "";
-
-    // === INFOTEXT ===
-    document.getElementById("schedule_text").value = s.schedule || "";
-
-    // === STATUS-INFO ===
-    document.getElementById("result").innerText = "Daten geladen ✅";
-
-    // =====================================================
-    //  BUTTONS
-    // =====================================================
-
-    // === Event-Steuerung (3-Zustände) ===
-    function getEventFields() {
-      return {
-        title: document.getElementById("event_title").value,
-        location: document.getElementById("event_location").value,
-        date: document.getElementById("event_date").value,
-      };
-    }
-
-    document.getElementById("btn_event_large")?.addEventListener("click", () => {
-      const data = {
-        event: {
-          ...getEventFields(),
-          style: "normal"
-        },
-        show: { event: true }
-      };
-      updateStatePartial(data);
+  showBtn?.addEventListener("click", () => {
+    const data = options.data ? options.data() : {};
+    updateStatePartial({
+      [section]: data,
+      show: { [section]: true }
     });
+  });
 
-    document.getElementById("btn_event_small")?.addEventListener("click", () => {
-      const data = {
-        event: {
-          ...getEventFields(),
-          style: "compact"
-        },
-        show: { event: false }
-      };
-      updateStatePartial(data);
-    });
+  hideBtn?.addEventListener("click", () => {
+    updateStatePartial({ show: { [section]: false } });
+  });
+}
 
-    document.getElementById("btn_event_off")?.addEventListener("click", () => {
-      const data = {
-        event: {
-          ...getEventFields(),
-          style: "normal"
-        },
-        show: { event: false }
-      };
-      updateStatePartial(data);
-    });
+// ======================================================================
+//  STATUS-VISUALISIERUNG (welche Box ist sichtbar?)
+// ======================================================================
+// ======================================================================
+//  STATUS-VISUALISIERUNG – kompakt & wartbar
+// ======================================================================
+function updateButtonStatus(state) {
+  const buttons = {
+    event: {
+      big: document.getElementById("btn_event_show_big"),
+      small: document.getElementById("btn_event_show_small")
+    },
+    weather: document.getElementById("btn_weather_show"),
+    clock: document.getElementById("btn_clock_show"),
+    caption: document.getElementById("btn_caption_show"),
+    branding: document.getElementById("btn_branding_show"),
+    schedule: document.getElementById("btn_schedule_show"),
+    outro: document.getElementById("btn_outro_show"),
+    sponsor_bug: document.getElementById("btn_sponsorbug_show"),
+    sponsor_bar: document.getElementById("btn_sponsorbar_show")
+  };
 
-
-    // === Wetter ===
-    document.getElementById("btn_show_weather")?.addEventListener("click", () => {
-      const data = {
-        weather: {
-          temperature: document.getElementById("weather_temp").value,
-          wind: document.getElementById("weather_wind").value,
-          visibility: document.getElementById("weather_vis").value
-        },
-        show: { weather: true }
-      };
-      updateStatePartial(data);
-    });
-
-    document.getElementById("btn_hide_weather")?.addEventListener("click", () => {
-      updateStatePartial({ show: { weather: false } });
-    });
-
-    // === Infotext ===
-    document.getElementById("btn_show_schedule")?.addEventListener("click", () => {
-      const text = document.getElementById("schedule_text").value;
-      updateStatePartial({ show: { schedule: true }, schedule: text });
-    });
-
-    document.getElementById("btn_hide_schedule")?.addEventListener("click", () => {
-      updateStatePartial({ show: { schedule: false } });
-    });
-
-    // === Uhrzeit ===
-    document.getElementById("btn_show_uhr")?.addEventListener("click", () => {
-      updateStatePartial({ show: { uhr: true } });
-    });
-
-    document.getElementById("btn_hide_uhr")?.addEventListener("click", () => {
-      updateStatePartial({ show: { uhr: false } });
-    });
-    // === Branding ===
-    document.getElementById("btn_show_branding")?.addEventListener("click", () => {
-      updateStatePartial({
-        show: { branding: true },
-        branding: { logo: "snowgames_logo.svg" }
-      });
-    });
-
-    document.getElementById("btn_hide_branding")?.addEventListener("click", () => {
-      updateStatePartial({
-        show: { branding: false }
-      });
-    });
-
-    console.log("✅ Steuerung vollständig initialisiert");
-  } catch (err) {
-    console.error("❌ Fehler beim Laden:", err);
-    document.getElementById("result").innerText = "Fehler beim Laden ❌";
+  // --- EVENT (2 Buttons, style-abhängig) -------------------------------
+  if (state.show?.event) {
+    const compact = state.event?.style === "compact";
+    buttons.event.small?.classList.toggle("active", compact);
+    buttons.event.big?.classList.toggle("active", !compact);
+  } else {
+    buttons.event.small?.classList.remove("active");
+    buttons.event.big?.classList.remove("active");
   }
+
+  // --- REST (1 Button je Modul) ---------------------------------------
+  for (const [key, btn] of Object.entries(buttons)) {
+    if (key === "event") continue; // bereits erledigt
+    const active =
+      state.show?.[key] ||            // normaler show-Status
+      (key === "outro" && state.outro?.visible); // Fallback für Outro
+    btn?.classList.toggle("active", !!active);
+  }
+}
+
+// ------------------------------------------------------------------------
+//  INITIALIZATION
+// ------------------------------------------------------------------------
+window.addEventListener("DOMContentLoaded", async () => {
+  log("🚀 Initializing control panel…");
+  try {
+    localState = await fetchState();
+    log("✅ state.json loaded:", localState);
+  } catch (err) {
+    handleError(err, "fetchState");
+    localState = {};
+  }
+
+  const s = localState;
+
+  // --- Fill form fields --------------------------------------------------
+  const setVal = (id, val = "") => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  };
+
+  // EVENT
+  setVal("event_title", s.event?.title);
+  setVal("event_location", s.event?.location);
+  setVal("event_date", s.event?.date);
+
+  // WEATHER
+  setVal("weather_temp", s.weather?.temperature);
+  setVal("weather_wind", s.weather?.wind);
+  setVal("weather_vis", s.weather?.visibility);
+
+  // CAPTION
+  setVal("caption_name", s.caption?.name);
+  setVal("caption_role", s.caption?.role);
+
+  // TEXTS
+  setVal("schedule_text", s.schedule?.text);
+  setVal("outro_text", s.outro?.text);
+
+  if (statusElem()) statusElem().innerText = "Data loaded ✅";
+
+  updateButtonStatus(s);
+
+  // ----------------------------------------------------------------------
+  //  REGISTER HANDLERS
+  // ----------------------------------------------------------------------
+
+  // EVENT (big / small / hide)
+  const getEventFields = () => ({
+    title: document.getElementById("event_title").value,
+    location: document.getElementById("event_location").value,
+    date: document.getElementById("event_date").value
+  });
+
+  document.getElementById("btn_event_show_big")?.addEventListener("click", () => {
+    updateStatePartial({
+      event: { ...getEventFields(), style: "normal" },
+      show: { event: true }
+    });
+  });
+
+  document.getElementById("btn_event_show_small")?.addEventListener("click", () => {
+    updateStatePartial({
+      event: { ...getEventFields(), style: "compact" },
+      show: { event: true }
+    });
+  });
+
+  document.getElementById("btn_event_hide")?.addEventListener("click", () => {
+    updateStatePartial({ show: { event: false } });
+  });
+
+  // WEATHER
+  registerShowHide("weather", {
+    data: () => ({
+      temperature: document.getElementById("weather_temp").value,
+      wind: document.getElementById("weather_wind").value,
+      visibility: document.getElementById("weather_vis").value
+    })
+  });
+
+  // CAPTION
+  registerShowHide("caption", {
+    data: () => ({
+      name: document.getElementById("caption_name").value.trim(),
+      role: document.getElementById("caption_role").value.trim()
+    })
+  });
+
+  // SCHEDULE / OUTRO (share same info box)
+  document.getElementById("btn_schedule_show")?.addEventListener("click", () => {
+    const text = document.getElementById("schedule_text").value;
+    updateStatePartial({
+      schedule: { text, visible: true },
+      outro: { visible: false },
+      show: { schedule: true }
+    });
+  });
+
+  document.getElementById("btn_schedule_hide")?.addEventListener("click", () => {
+    updateStatePartial({
+      schedule: { visible: false },
+      show: { schedule: false }
+    });
+  });
+
+  document.getElementById("btn_outro_show")?.addEventListener("click", () => {
+    const outroText = document.getElementById("outro_text").value;
+    updateStatePartial({
+      outro: { text: outroText, visible: true },
+      schedule: { visible: false },
+      show: { schedule: false }
+    });
+  });
+
+  document.getElementById("btn_outro_hide")?.addEventListener("click", () => {
+    updateStatePartial({ outro: { visible: false } });
+  });
+
+  // CLOCK
+  registerShowHide("clock");
+
+  // BRANDING
+  registerShowHide("branding", {
+    data: () => ({ logo: "snowgames_logo.svg" })
+  });
+
+  // SPONSOR BUG & BAR
+  registerShowHide("sponsorbug");
+  registerShowHide("sponsorbar");
+
+  // ======================================================================
+  //  LOCAL CLOCK DISPLAY IN CONTROL PANEL
+  // ======================================================================
+  const clockDisplay = document.getElementById("clock_display");
+
+  function updateLocalClock() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    const ss = String(now.getSeconds()).padStart(2, "0");
+    clockDisplay.textContent = `${hh}:${mm}:${ss}`;
+  }
+
+  if (clockDisplay) {
+    updateLocalClock();                // Initial anzeigen
+    setInterval(updateLocalClock, 1000); // Jede Sekunde aktualisieren
+  }
+
+
+  // ----------------------------------------------------------------------
+  //  AUTO-SAVE (optional UX improvement)
+  // ----------------------------------------------------------------------
+  document.getElementById("schedule_text")?.addEventListener(
+    "input",
+    debounce(() => {
+      updateStatePartial({
+        schedule: { text: document.getElementById("schedule_text").value }
+      });
+    }, 1000)
+  );
+
+  log("✅ Control panel initialized successfully");
 });
