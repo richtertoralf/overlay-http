@@ -5,15 +5,14 @@ Es stellt Texte und Status-Infos als Browser-Quelle bereit, ideal für **GoStrea
 
 ---
 > install.sh funktioniert noch nicht.  
-> Die alte Struktur ist getestet. Projekt aber noch sehr frisch, Version 0.2 ;-)
 
 ## Funktionen
 
-- Textanzeige an fünf Positionen (oben links/rechts, unten links/rechts, Mitte)
+- Textanzeige an verschiedenen festen Positionen gemäß im CSS eingestelltem Design
 - Hintergrund transparent oder halbtransparent (CSS)
 - Steuerseite mit Textfeldern, Checkboxen und Status-Speicherung
-- Automatische Aktualisierung der Anzeige alle 2 Sekunden
-- Kein großer Webserver nötig – **BusyBox httpd** (ca. 200 KB RAM)
+- Automatische Aktualisierung der Anzeige jede Sekunde
+- minimaler Webserver – **BusyBox httpd** (ca. 200 KB RAM)
 - Start als **systemd-Dienst**, Port 8090
 
 ---
@@ -35,7 +34,7 @@ overlay-http/
    └── cgi-bin/ → Platz für spätere CGI-Skripte
 ```
 ```bash
-# Stand 07.11.25:
+# aktueller Stand 07.11.25:
 tori@mediamtx18:/opt/overlay$ tree
 .
 ├── cgi-bin
