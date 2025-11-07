@@ -1,1 +1,317 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700&display=swap');
 
+/* ==========================================================================
+   SNOWGAMES.LIVE – Overlay Design v2.5
+   Unified variable system (colors, spacing, fonts)
+   Compatible with 1920×1080 broadcast overlays
+   ========================================================================== */
+
+/* === Z-INDEX ORDER =======================================================
+   30 – clock_box
+   25 – branding_box
+   20 – caption_box
+   18 – sponsor_bar_box
+   15 – sponsor_bug_box
+   10 – event_box
+    9 – weather_box
+    5 – info_box
+   ======================================================================= */
+
+/* === BASE VARIABLES ====================================================== */
+:root {
+  /* --- COLORS --- */
+  --sg-blue: #0A2E6D;
+  --sg-accent-blue: #009CD9;
+  --sg-red: #E30613;
+  --sg-yellow: #F0AB00;
+  --sg-white: #FFFFFF;
+  --sg-black: rgba(0, 0, 0, 0.65);
+  --sg-black-light: rgba(0, 0, 0, 0.45);
+  --sg-black-strong: rgba(0, 0, 0, 0.85);
+
+  /* --- SPACING & RADII --- */
+  --sg-gap-xs: 0.25vw;
+  --sg-gap-s: 0.5vw;
+  --sg-gap-m: 1vw;
+  --sg-gap-l: 2vw;
+  --sg-radius-s: 0.4vw;
+  --sg-radius-m: 0.8vw;
+
+  --sg-border-thin: 0.25vw;
+  --sg-border: 0.4vw;
+  --sg-border-thick: 0.6vw;
+
+  /* --- TYPOGRAPHY --- */
+  --sg-font-sm: clamp(1.1rem, 1.5vw, 1.4rem);
+  --sg-font-md: clamp(1.5rem, 1.9vw, 2.2rem);
+  --sg-font-lg: clamp(2rem, 2.6vw, 3rem);
+
+  /* --- TRANSITION --- */
+  --sg-trans: 0.5s ease-in-out;
+}
+
+/* ==========================================================================
+   BASE LAYOUT
+   ========================================================================== */
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: transparent;
+  font-family: 'Roboto Condensed', Arial, sans-serif;
+  font-weight: 500;
+  color: var(--sg-white);
+  text-shadow:
+    0 0.1vw 0.2vw rgba(0, 0, 0, 0.8),
+    0 0 0.4vw rgba(0, 0, 0, 0.6);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === POSITIONING BASE CLASS === */
+.pos {
+  position: absolute;
+  white-space: pre-line;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--sg-trans),
+    visibility var(--sg-trans);
+}
+
+.pos.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ==========================================================================
+   EVENT BOX – Event title, location, date
+   ========================================================================== */
+.event_box {
+  top: var(--sg-gap-l);
+  left: var(--sg-gap-l);
+  background: var(--sg-black-light);
+  border-left: var(--sg-border) solid var(--sg-yellow);
+  border-radius: var(--sg-radius-s);
+  padding: var(--sg-gap-s) var(--sg-gap-l);
+  line-height: 1.2;
+  z-index: 10;
+  max-width: 45vw;
+  transition: all var(--sg-trans);
+}
+
+.event_box .event_title {
+  font-size: var(--sg-font-lg);
+  font-weight: 700;
+}
+
+.event_box .event_location {
+  font-size: var(--sg-font-md);
+  opacity: 0.95;
+}
+
+.event_box .event_date {
+  font-size: var(--sg-font-sm);
+  color: var(--sg-accent-blue);
+}
+
+.event_box.compact {
+  background: none;
+  border: none;
+  padding: 0;
+  text-shadow: 0 var(--sg-gap-xs) calc(var(--sg-gap-xs) * 2) var(--sg-black-strong);
+  opacity: 0.9;
+}
+
+.event_box.compact .event_title {
+  font-size: var(--sg-font-md);
+}
+
+.event_box.compact .event_location {
+  font-size: var(--sg-font-sm);
+  opacity: 0.9;
+}
+
+.event_box.compact .event_date {
+  display: none;
+}
+
+/* ==========================================================================
+   WEATHER BOX – Temperature, wind, visibility
+   ========================================================================== */
+.weather_box {
+  top: 40vh;
+  left: var(--sg-gap-l);
+  background: var(--sg-black-light);
+  border-left: var(--sg-border) solid var(--sg-accent-blue);
+  border-radius: var(--sg-radius-s);
+  padding: var(--sg-gap-s) var(--sg-gap-m);
+  font-size: var(--sg-font-md);
+  text-align: right;
+  line-height: 0.7;
+  z-index: 9;
+  transition: opacity var(--sg-trans);
+}
+
+.weather_box div:not(:last-child) {
+  margin-bottom: var(--sg-gap-xs);
+}
+
+/* ==========================================================================
+   INFO BOX – Schedule or Outro (centered)
+   ========================================================================== */
+.info_box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(40rem, 70vw, 65rem);
+  box-sizing: border-box;
+
+  background: var(--sg-black);
+  border-left: var(--sg-border) solid var(--sg-accent-blue);
+  border-radius: var(--sg-radius-m);
+  padding: var(--sg-gap-l);
+
+  font-size: var(--sg-font-md);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  text-align: left;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+
+  opacity: 0;
+  transition: opacity var(--sg-trans);
+  z-index: 15;
+}
+
+.info_box.visible {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   CAPTION BOX – Lower third name bar
+   ========================================================================== */
+.caption_box {
+  bottom: 6vh;
+  left: 20vw;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity var(--sg-trans);
+  z-index: 20;
+}
+
+.caption_box.visible {
+  opacity: 1;
+}
+
+.caption_bg {
+  background: var(--sg-black);
+  border-left: var(--sg-border) solid var(--sg-accent-blue);
+  padding: var(--sg-gap-s) var(--sg-gap-m);
+  border-radius: var(--sg-radius-s);
+  min-width: 16vw;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sg-gap-s);
+}
+
+.caption_name {
+  font-size: var(--sg-font-lg);
+  line-height: 1.2;
+}
+
+.caption_role {
+  font-size: var(--sg-font-md);
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   CLOCK BOX – Time display
+   ========================================================================== */
+.clock_box {
+  bottom: var(--sg-gap-l);
+  left: var(--sg-gap-l);
+  font-size: var(--sg-font-md);
+  background: var(--sg-black);
+  border-left: var(--sg-border) solid var(--sg-red);
+  border-radius: var(--sg-radius-s);
+  padding: var(--sg-gap-s) var(--sg-gap-m);
+  transition: opacity var(--sg-trans);
+  z-index: 30;
+}
+
+.clock_box.visible {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   BRANDING BOX – Logo display
+   ========================================================================== */
+.branding_box {
+  bottom: var(--sg-gap-l);
+  right: var(--sg-gap-l);
+  width: 15vw;
+  opacity: 0;
+  transform: translateY(0.5vw);
+  transition:
+    opacity var(--sg-trans),
+    transform var(--sg-trans);
+  z-index: 25;
+}
+
+.branding_box.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.branding_box img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0.2vw 0.4vw rgba(0, 0, 0, 0.4));
+}
+
+/* ==========================================================================
+   SPONSOR BOXES – Bug (corner logo) & Bar (horizontal band)
+   ========================================================================== */
+.sponsor_bug_box {
+  right: var(--sg-gap-l);
+  bottom: var(--sg-gap-l);
+  width: 8vw;
+  opacity: 0;
+  transition: opacity var(--sg-trans);
+  z-index: 15;
+}
+
+.sponsor_bug_box.visible {
+  opacity: 1;
+}
+
+.sponsor_bar_box {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 7vh;
+  background: var(--sg-black);
+  opacity: 0;
+  transition: opacity var(--sg-trans);
+  z-index: 18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sponsor_bar_box.visible {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   END OF FILE
+   ========================================================================== */
