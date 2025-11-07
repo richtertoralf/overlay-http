@@ -1,229 +1,317 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700&display=swap');
 
 /* ==========================================================================
-   SNOWGAMES.LIVE – Default Overlay Design (v2)
-   Struktur & Stil für Browser Overlays im 1920x1080 Broadcast-Layout
-   ==========================================================================
-*/
+   SNOWGAMES.LIVE – Overlay Design v2.5
+   Unified variable system (colors, spacing, fonts)
+   Compatible with 1920×1080 broadcast overlays
+   ========================================================================== */
 
-/* === Farbdefinitionen === */
+/* === Z-INDEX ORDER =======================================================
+   30 – clock_box
+   25 – branding_box
+   20 – caption_box
+   18 – sponsor_bar_box
+   15 – sponsor_bug_box
+   10 – event_box
+    9 – weather_box
+    5 – info_box
+   ======================================================================= */
+
+/* === BASE VARIABLES ====================================================== */
 :root {
-    --sg-blue-dark: #0A2E6D;
-    --sg-blue-light: #009CD9;
-    --sg-red: #E30613;
-    --sg-yellow: #F0AB00;
-    --sg-black-trans: rgba(16, 16, 16, 0.75);
-    --sg-white: #ffffff;
-}
+  /* --- COLORS --- */
+  --sg-blue: #0A2E6D;
+  --sg-accent-blue: #009CD9;
+  --sg-red: #E30613;
+  --sg-yellow: #F0AB00;
+  --sg-white: #FFFFFF;
+  --sg-black: rgba(0, 0, 0, 0.65);
+  --sg-black-light: rgba(0, 0, 0, 0.45);
+  --sg-black-strong: rgba(0, 0, 0, 0.85);
 
-/* === Grundlayout === */
-body {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background: transparent;
-    /*background-color: #111 !important; */
-    font-family: 'Roboto Condensed', Arial, sans-serif;
-    color: var(--sg-white);
-    font-weight: 600;
-    text-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.8),
-        0 0 8px rgba(0, 0, 0, 0.6);
-}
+  /* --- SPACING & RADII --- */
+  --sg-gap-xs: 0.25vw;
+  --sg-gap-s: 0.5vw;
+  --sg-gap-m: 1vw;
+  --sg-gap-l: 2vw;
+  --sg-radius-s: 0.4vw;
+  --sg-radius-m: 0.8vw;
 
-.pos {
-    position: absolute;
-    white-space: pre-line;
+  --sg-border-thin: 0.25vw;
+  --sg-border: 0.4vw;
+  --sg-border-thick: 0.6vw;
+
+  /* --- TYPOGRAPHY --- */
+  --sg-font-sm: clamp(1.1rem, 1.5vw, 1.4rem);
+  --sg-font-md: clamp(1.5rem, 1.9vw, 2.2rem);
+  --sg-font-lg: clamp(2rem, 2.6vw, 3rem);
+
+  /* --- TRANSITION --- */
+  --sg-trans: 0.5s ease-in-out;
 }
 
 /* ==========================================================================
-   EVENT BOX – Hauptmodul für Eventtitel, Ort, Datum
-   Unterstützt zwei Modi:
-   - .normal (Vorspann)
-   - .compact (permanent sichtbar, dezente Schrift)
-   ==========================================================================
-*/
+   BASE LAYOUT
+   ========================================================================== */
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: transparent;
+  font-family: 'Roboto Condensed', Arial, sans-serif;
+  font-weight: 500;
+  color: var(--sg-white);
+  text-shadow:
+    0 0.1vw 0.2vw rgba(0, 0, 0, 0.8),
+    0 0 0.4vw rgba(0, 0, 0, 0.6);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-/* === Grundlayout (gemeinsam) === */
+/* === POSITIONING BASE CLASS === */
+.pos {
+  position: absolute;
+  white-space: pre-line;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--sg-trans),
+    visibility var(--sg-trans);
+}
+
+.pos.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ==========================================================================
+   EVENT BOX – Event title, location, date
+   ========================================================================== */
 .event_box {
-    top: 30px;
-    left: 40px;
-    color: var(--sg-white);
-    border-radius: 10px;
-    border-left: 6px solid var(--sg-yellow);
-    position: absolute;
-    line-height: 1.1;
-    transition:
-        opacity 0.8s ease-in-out,
-        all 0.4s ease-in-out;
-    opacity: 0;
+  top: var(--sg-gap-l);
+  left: var(--sg-gap-l);
+  background: var(--sg-black-light);
+  border-left: var(--sg-border) solid var(--sg-yellow);
+  border-radius: var(--sg-radius-s);
+  padding: var(--sg-gap-s) var(--sg-gap-l);
+  line-height: 1.2;
+  z-index: 10;
+  max-width: 45vw;
+  transition: all var(--sg-trans);
 }
 
-/* === Sichtbarkeitssteuerung (Fade-In/Out) === */
-.event_box.visible {
-    opacity: 1;
+.event_box .event_title {
+  font-size: var(--sg-font-lg);
+  font-weight: 700;
 }
 
-/* === Variante: Normal (z. B. Vorspann oder Anmoderation) === */
-.event_box.normal {
-    background: rgba(0, 0, 0, 0.45);
-    padding: 8px 22px;
-    max-width: 720px;
+.event_box .event_location {
+  font-size: var(--sg-font-md);
+  opacity: 0.95;
 }
 
-.event_box.normal .event_title {
-    font-size: 36px;
-    font-weight: 700;
-    line-height: 1.0;
+.event_box .event_date {
+  font-size: var(--sg-font-sm);
+  color: var(--sg-accent-blue);
 }
 
-.event_box.normal .event_location {
-    font-size: 26px;
-    opacity: 0.95;
-}
-
-.event_box.normal .event_date {
-    font-size: 22px;
-    color: var(--sg-blue-light);
-}
-
-/* === Variante: Compact (z. B. ARD/ZDF-Stil dauerhaft sichtbar) === */
 .event_box.compact {
-    display: block !important;
-    background: none !important;
-    border: none !important;
-    padding: 0 !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-}
-
-.event_box.compact.visible {
-    opacity: 0.9;
-    /* beim Einblenden leicht betont */
+  background: none;
+  border: none;
+  padding: 0;
+  text-shadow: 0 var(--sg-gap-xs) calc(var(--sg-gap-xs) * 2) var(--sg-black-strong);
+  opacity: 0.9;
 }
 
 .event_box.compact .event_title {
-    font-size: 26px;
-    font-weight: 700;
-    line-height: 1.1;
+  font-size: var(--sg-font-md);
 }
 
 .event_box.compact .event_location {
-    font-size: 20px;
-    opacity: 0.9;
+  font-size: var(--sg-font-sm);
+  opacity: 0.9;
 }
 
 .event_box.compact .event_date {
-    display: none;
-    /* Datum in Compact-Modus ausgeblendet */
+  display: none;
 }
 
 /* ==========================================================================
-   WEATHER BOX – Temperatur, Wind, Sicht
-   ==========================================================================
-*/
-
+   WEATHER BOX – Temperature, wind, visibility
+   ========================================================================== */
 .weather_box {
-    top: 300px;
-    left: 40px;
-    background: rgba(0, 0, 0, 0.45);
-    border-radius: 10px;
-    padding: 6px 14px;
-    color: var(--sg-white);
-    text-align: right;
-    font-size: 24px;
-    line-height: 0.7;
-    border-left: 4px solid var(--sg-blue-light);
-    transition: opacity 0.8s ease-in-out;
-    opacity: 0;
-}
-
-.weather_box.visible {
-    opacity: 1;
+  top: 40vh;
+  left: var(--sg-gap-l);
+  background: var(--sg-black-light);
+  border-left: var(--sg-border) solid var(--sg-accent-blue);
+  border-radius: var(--sg-radius-s);
+  padding: var(--sg-gap-s) var(--sg-gap-m);
+  font-size: var(--sg-font-md);
+  text-align: right;
+  line-height: 0.7;
+  z-index: 9;
+  transition: opacity var(--sg-trans);
 }
 
 .weather_box div:not(:last-child) {
-    margin-bottom: 4px;
+  margin-bottom: var(--sg-gap-xs);
 }
 
 /* ==========================================================================
-   SCHEDULE BOX – Ablauf / Programm (zentriert)
-   ==========================================================================
-*/
+   INFO BOX – Schedule or Outro (centered)
+   ========================================================================== */
+.info_box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(40rem, 70vw, 65rem);
+  box-sizing: border-box;
 
-.schedule_box {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 40px;
-    border-left: 6px solid var(--sg-blue-light);
-    padding: 30px 60px;
-    font-size: 28px;
-    text-align: left;
-    white-space: pre-line;
-    line-height: 1.3;
-    max-width: 1200px;
-    transition: opacity 0.8s ease-in-out;
-    opacity: 0;
+  background: var(--sg-black);
+  border-left: var(--sg-border) solid var(--sg-accent-blue);
+  border-radius: var(--sg-radius-m);
+  padding: var(--sg-gap-l);
+
+  font-size: var(--sg-font-md);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  text-align: left;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+
+  opacity: 0;
+  transition: opacity var(--sg-trans);
+  z-index: 15;
 }
 
-.schedule_box.visible {
-    opacity: 1;
+.info_box.visible {
+  opacity: 1;
 }
 
 /* ==========================================================================
-   CLOCK – Uhrzeit unten links
-   ==========================================================================
-*/
-
-.uhr {
-    bottom: 30px;
-    left: 40px;
-    font-size: 28px;
-    background: var(--sg-black-trans);
-    border-radius: 10px;
-    padding: 6px 14px;
-    border-left: 4px solid var(--sg-red);
-    line-height: 1.0;
-    transition: opacity 0.6s ease-in-out;
-    opacity: 0;
+   CAPTION BOX – Lower third name bar
+   ========================================================================== */
+.caption_box {
+  bottom: 6vh;
+  left: 20vw;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity var(--sg-trans);
+  z-index: 20;
 }
 
-.uhr.visible {
-    opacity: 1;
+.caption_box.visible {
+  opacity: 1;
 }
 
+.caption_bg {
+  background: var(--sg-black);
+  border-left: var(--sg-border) solid var(--sg-accent-blue);
+  padding: var(--sg-gap-s) var(--sg-gap-m);
+  border-radius: var(--sg-radius-s);
+  min-width: 16vw;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sg-gap-s);
+}
+
+.caption_name {
+  font-size: var(--sg-font-lg);
+  line-height: 1.2;
+}
+
+.caption_role {
+  font-size: var(--sg-font-md);
+  font-weight: 400;
+  opacity: 0.85;
+}
 
 /* ==========================================================================
-   BRANDING – Snowgames.live Logo unten rechts
+   CLOCK BOX – Time display
+   ========================================================================== */
+.clock_box {
+  bottom: var(--sg-gap-l);
+  left: var(--sg-gap-l);
+  font-size: var(--sg-font-md);
+  background: var(--sg-black);
+  border-left: var(--sg-border) solid var(--sg-red);
+  border-radius: var(--sg-radius-s);
+  padding: var(--sg-gap-s) var(--sg-gap-m);
+  transition: opacity var(--sg-trans);
+  z-index: 30;
+}
+
+.clock_box.visible {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   BRANDING BOX – Logo display
    ========================================================================== */
 .branding_box {
-  position: absolute;
-  bottom: 10px;         /* Abstand vom unteren Rand */
-  right: 80px;          /* Abstand vom rechten Rand */
-  width: 280px;         /* Gesamtgröße des Containers */
-  height: auto;
+  bottom: var(--sg-gap-l);
+  right: var(--sg-gap-l);
+  width: 15vw;
   opacity: 0;
-  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
-  transform: translateY(10px); /* Startposition für weiches Einblenden */
+  transform: translateY(0.5vw);
+  transition:
+    opacity var(--sg-trans),
+    transform var(--sg-trans);
+  z-index: 25;
 }
 
 .branding_box.visible {
   opacity: 1;
-  transform: translateY(0);    /* gleitet leicht nach oben beim Einblenden */
+  transform: translateY(0);
 }
 
-/* Bild im Container zentrieren und skalieren */
 .branding_box img {
   display: block;
-  width: 100%;          /* passt sich Containerbreite an */
+  width: 100%;
   height: auto;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); /* leichter Schatten für TV-Look */
+  filter: drop-shadow(0 0.2vw 0.4vw rgba(0, 0, 0, 0.4));
 }
 
+/* ==========================================================================
+   SPONSOR BOXES – Bug (corner logo) & Bar (horizontal band)
+   ========================================================================== */
+.sponsor_bug_box {
+  right: var(--sg-gap-l);
+  bottom: var(--sg-gap-l);
+  width: 8vw;
+  opacity: 0;
+  transition: opacity var(--sg-trans);
+  z-index: 15;
+}
+
+.sponsor_bug_box.visible {
+  opacity: 1;
+}
+
+.sponsor_bar_box {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 7vh;
+  background: var(--sg-black);
+  opacity: 0;
+  transition: opacity var(--sg-trans);
+  z-index: 18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sponsor_bar_box.visible {
+  opacity: 1;
+}
 
 /* ==========================================================================
-   ENDE DER DATEI
+   END OF FILE
    ========================================================================== */
